@@ -2,25 +2,32 @@ package main
 
 import (
 	"fmt"
+	"os"
 
-	"github.com/cli/go-gh/v2/pkg/api"
+	"github.com/lindluni/gh-repo-audit/internal"
+	"github.com/urfave/cli/v2"
 )
 
 func main() {
-	fmt.Println("hi world, this is the gh-repo-audit extension!")
-	client, err := api.DefaultRESTClient()
-	if err != nil {
-		fmt.Println(err)
-		return
+	app := &cli.App{
+		Name:                 "gh-repo-audit",
+		Usage:                "Audit GitHub repositories",
+		Version:              "1.0.0",
+		EnableBashCompletion: true,
+		Suggest:              true,
+		Commands: []*cli.Command{
+			{
+				Name:   "users",
+				Usage:  "Retrieve a list of repos with no users",
+				Flags:  internal.UsersFlags(),
+				Action: internal.Users,
+			},
+		},
 	}
-	response := struct {Login string}{}
-	err = client.Get("user", &response)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Printf("running as %s\n", response.Login)
-}
 
-// For more examples of using go-gh, see:
-// https://github.com/cli/go-gh/blob/trunk/example_gh_test.go
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+}
