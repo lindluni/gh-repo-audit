@@ -1,6 +1,6 @@
 module github.com/lindluni/gh-repo-audit
 
-go 1.22.3
+go 1.22
 
 require (
 	github.com/google/go-github/v55 v55.0.0
