@@ -10,7 +10,6 @@ func Client(token, url string) (*github.Client, error) {
 	if url == "" {
 		return github.NewClient(nil).WithAuthToken(token), nil
 	}
-	sanitizedURL := strings.TrimPrefix(url, "https://")
-	sanitizedURL = strings.TrimSuffix(sanitizedURL, "/")
+	sanitizedURL := strings.TrimSuffix(sanitizedURL, "/")
 	return github.NewClient(nil).WithAuthToken(token).WithEnterpriseURLs(sanitizedURL, sanitizedURL)
 }
